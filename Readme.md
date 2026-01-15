@@ -17,12 +17,10 @@ GLHF, this isn't super easy.
   - Clone https://github.com/zyantific/zydis as `zydis`.
   - Create a `CMakeLists.txt` with this contents:
 
-        ```cmake
         cmake_minimum_required(VERSION 3.15)
 
         add_subdirectory(zydis)
         add_subdirectory(safetyhook)
-        ```
   - Run:
     - `cmake -B build -G "Visual Studio 17 2022" -A x64`
     - `cmake --build build --config Debug --target ALL_BUILD`
