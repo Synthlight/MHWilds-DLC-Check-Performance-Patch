@@ -13,15 +13,14 @@ BOOL APIENTRY DllMain(const HMODULE hModule, const DWORD ulReasonForCall, const 
 }
 
 // app.dlc.DlcService::isAvailableDLC(app.dlc.DlcProductId.ID)
-typedef bool (*   IsAvailableDlcDef)(void* vmctx, void* self, int32_t id);
-IsAvailableDlcDef originalIsAvailableDlc;
-
 std::unordered_map<int32_t, bool> dlcCache;
+
+SafetyHookInline originalIsAvailableDlc;
 
 DECLSPEC_NOINLINE bool IsAvailableDlc(void* vmctx, void* self, const int32_t id) {
     const auto match = dlcCache.find(id);
     if (match == dlcCache.end()) {
-        const auto ogResult = originalIsAvailableDlc(vmctx, self, id);
+        const auto ogResult = originalIsAvailableDlc.call<bool>(vmctx, self, id);
         dlcCache[id]        = ogResult;
         return ogResult;
     }
@@ -29,14 +28,13 @@ DECLSPEC_NOINLINE bool IsAvailableDlc(void* vmctx, void* self, const int32_t id)
 }
 
 // app.GUIManager::isNewBenefit()
-typedef bool (* IsNewBenefitDef)(void* vmctx, void* self);
-IsNewBenefitDef originalIsNewBenefit;
+SafetyHookInline originalIsNewBenefit;
 
 DECLSPEC_NOINLINE bool IsNewBenefit(void* vmctx, void* self) {
     return false;
 }
 
-bool MakeHook(const std::string& moduleName, const UINT64 moduleAddress, const std::string& targetName, const LPVOID newMethod, LPVOID* original, const std::string& scanString, const int32_t offset, LogBuffer* logBuffer) {
+bool MakeHook(const std::string& moduleName, const UINT64 moduleAddress, const std::string& targetName, const LPVOID newMethod, SafetyHookInline& original, const std::string& scanString, const int32_t offset, LogBuffer* logBuffer) {
     LOG_BUFFER("");
     LOG_BUFFER("Scanning for " << targetName << " bytes.");
     const auto addresses = ScanMemory(moduleName, scanString, false, true, nullptr, logBuffer);
@@ -50,15 +48,9 @@ bool MakeHook(const std::string& moduleName, const UINT64 moduleAddress, const s
     const auto injectAddress = const_cast<BYTE*>(addresses[0] + offset);
     LOG_BUFFER("Inject address: " << PRINT_RELATIVE_ADDRESS(moduleName, moduleAddress, injectAddress));
 
-    const auto createHookResult = MH_CreateHook(injectAddress, newMethod, original);
-    if (createHookResult != MH_OK) { // NOLINT(clang-diagnostic-microsoft-cast)
-        LOG_BUFFER("MH_CreateHook failed: " << createHookResult);
-        return false;
-    }
-
-    const auto enableHookResult = MH_EnableHook(injectAddress);
-    if (enableHookResult != MH_OK) {
-        LOG_BUFFER("MH_EnableHook failed: " << enableHookResult);
+    original = safetyhook::create_inline(injectAddress, newMethod);
+    if (!original.enabled()) {
+        LOG_BUFFER("safetyhook::create_inline failed.");
         return false;
     }
 
@@ -67,16 +59,9 @@ bool MakeHook(const std::string& moduleName, const UINT64 moduleAddress, const s
 }
 
 bool DoHook(const std::string& moduleName, const PTR_SIZE moduleAddress, LogBuffer* logBuffer) {
-    // Initialize MinHook.
-    const auto initializeResult = MH_Initialize();
-    if (initializeResult != MH_OK) {
-        LOG_BUFFER("MH_Initialize failed: " << initializeResult);
-        return false;
-    }
-
-    return MakeHook(moduleName, moduleAddress, "app.dlc.DlcService::isAvailableDLC(app.dlc.DlcProductId.ID)", &IsAvailableDlc, reinterpret_cast<LPVOID*>(&originalIsAvailableDlc), // NOLINT(clang-diagnostic-microsoft-cast)
+    return MakeHook(moduleName, moduleAddress, "app.dlc.DlcService::isAvailableDLC(app.dlc.DlcProductId.ID)", &IsAvailableDlc, originalIsAvailableDlc, // NOLINT(clang-diagnostic-microsoft-cast)
                     "5D 41 5E 41 5F C3 CC CC 41 57 41 56 41 54 56 57 55 53 48 83 EC 50 48 8B", 8, logBuffer)
-           && MakeHook(moduleName, moduleAddress, "app.GUIManager::isNewBenefit", &IsNewBenefit, reinterpret_cast<LPVOID*>(&originalIsNewBenefit), // NOLINT(clang-diagnostic-microsoft-cast)
+           && MakeHook(moduleName, moduleAddress, "app.GUIManager::isNewBenefit()", &IsNewBenefit, originalIsNewBenefit, // NOLINT(clang-diagnostic-microsoft-cast)
                        "55 41 57 41 56 41 55 41 54 56 57 53 48 83 EC 18 48 8D 6C 24 10 48 89 CE 48 8B 05 ?? ?? ?? ?? 48 31 E8 48 89 45 00 48 8B 05 ?? ?? ?? ?? 48 8B 90 B0 02 00 00 48 83 EC 20 41 B8 05 00 00 00 E8 ?? ?? ?? ?? 48 83 C4 20 84 C0", 0, logBuffer);
 }
 

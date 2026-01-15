@@ -8,7 +8,8 @@
 
 #include "../Base-Dll-Proxy/pch.h"
 
-#include <MinHook.h>
-#pragma comment(lib, "libMinHook.x64.lib")
+#include <safetyhook.hpp>
+#pragma comment(lib, "safetyhook.lib")
+#pragma comment(lib, "Zydis.lib")
 
 #include <unordered_map>

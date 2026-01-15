@@ -2,4 +2,5 @@
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Bident/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=buffable/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Portcrystal/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=safetyhook/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=vmctx/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
