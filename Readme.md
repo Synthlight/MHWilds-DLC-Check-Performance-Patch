@@ -31,6 +31,6 @@ GLHF, this isn't super easy.
 - Edit `DLC-Check-Performance-Patch.vcxproj`
   - Replace all occurences of `R:\Code\safetyhook-zydis\build` with wherever your output build dir stuff is.
   - Alternatively, cahnge all the safetyhook/zydis debug/release references to wherever your respective `lib` files wound up.
-- - Open `DLC-Check-Performance-Patch.sln` in Visual Studio:
+- Open `DLC-Check-Performance-Patch.sln` in Visual Studio:
   - Edit the project post-build step as I have this set to copy into the MHWilds dir, which will not match yours unless you have it installed in a Steam lib on the `O:` drive.
 - Build debug or release.
