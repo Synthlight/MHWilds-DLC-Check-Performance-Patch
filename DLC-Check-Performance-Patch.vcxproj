@@ -45,16 +45,16 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <TargetName>winhttp</TargetName>
-    <IncludePath>$(ProjectDir)..\Base-Dll-Proxy;C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt;R:\Code\minhook\include;R:\Code\safetyhook\include;R:\Code\zydis\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files (x86)\Windows Kits\10\Lib\10.0.22621.0\ucrt\x64;R:\Code\minhook\build\VC17\lib\Debug;R:\Code\safetyhook-zydis\build\safetyhook\Debug;R:\Code\safetyhook-zydis\build\zydis\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)..\Base-Dll-Proxy;C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt;R:\Code\safetyhook\include;R:\Code\zydis\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files (x86)\Windows Kits\10\Lib\10.0.22621.0\ucrt\x64;R:\Code\safetyhook-zydis\build\safetyhook\Debug;R:\Code\safetyhook-zydis\build\zydis\Debug;$(LibraryPath)</LibraryPath>
     <IntDir>$(ProjectDir)$(Platform)\$(Configuration)\</IntDir>
     <OutDir>$(ProjectDir)$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetName>winhttp</TargetName>
-    <IncludePath>$(ProjectDir)..\Base-Dll-Proxy;C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt;R:\Code\minhook\include;R:\Code\safetyhook\include;R:\Code\zydis\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files (x86)\Windows Kits\10\Lib\10.0.22621.0\ucrt\x64;R:\Code\minhook\build\VC17\lib\Release;R:\Code\safetyhook-zydis\build\safetyhook\Release;R:\Code\safetyhook-zydis\build\zydis\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)..\Base-Dll-Proxy;C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt;R:\Code\safetyhook\include;R:\Code\zydis\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files (x86)\Windows Kits\10\Lib\10.0.22621.0\ucrt\x64;R:\Code\safetyhook-zydis\build\safetyhook\Release;R:\Code\safetyhook-zydis\build\zydis\Release;$(LibraryPath)</LibraryPath>
     <IntDir>$(ProjectDir)$(Platform)\$(Configuration)\</IntDir>
     <OutDir>$(ProjectDir)$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
